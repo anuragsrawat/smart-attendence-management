@@ -1,0 +1,61 @@
+body {
+  font-family: Arial, sans-serif;
+  background: #085078;  /* fallback for old browsers */
+  background: -webkit-linear-gradient(to right, #85D8CE, #085078);  /* Chrome 10-25, Safari 5.1-6 */
+  background: linear-gradient(to right, #85D8CE, #085078); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+}
+
+.matrix-container {
+  display: grid;
+  grid-template-columns: repeat(4, 50px);
+  grid-template-rows: repeat(4, 50px);
+  gap: 5px;
+  justify-content: center;
+  margin-top: 20px;
+  visibility: hidden;
+}
+.cell {
+  width: 50px;
+  height: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: lightgray;
+  border: 1px solid black;
+  font-size: 18px;
+}
+button {
+  display: block;
+  margin: 20px auto;
+}
+#message {
+  text-align: center;
+  margin-top: 20px;
+  font-size: 20px;
+  color: green;
+  visibility: hidden;
+}
+#locationInfo {
+  margin-top: 10px;
+  font-size: 16px;
+}
+#winMessage {
+  margin-top: 20px;
+  font-size: 18px;
+  color: blue;
+  visibility: hidden;
+  text-align: center;
+}
+/* #startButton{
+  margin-left:630px;
+} */
+
+.information{
+  height:300px;
+  width:250px;
+  padding: 10px;
+  margin-left:500px;
+  border-radius: 30px;
+  margin-bottom: 12px;;
+  
+}

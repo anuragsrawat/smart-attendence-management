@@ -1,0 +1,18 @@
+body{
+  background: #085078;  /* fallback for old browsers */
+  background: -webkit-linear-gradient(to right, #85D8CE, #085078);  /* Chrome 10-25, Safari 5.1-6 */
+  background: linear-gradient(to right, #85D8CE, #085078); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+  
+}
+#batch{
+  display: flex;
+  flex-wrap: wrap; /* Allows the items to wrap onto a new row */
+  justify-content: space-between; /* Adds space between the items */
+  gap: 20px; /* Adds space between the cards */
+  margin:50px;
+  
+}
+.card-img-top {
+  height: 200px; /* You can adjust this value */
+  object-fit: cover; /* Ensures the image covers the space while maintaining aspect ratio */
+}

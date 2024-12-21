@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <link rel="stylesheet" href="pattern.css">
+  <title>Pattern Box || Code Village</title>
+</head>
+<body>
+
+  <!-- Form for input data -->
+  <form action="/yourattendance" method="GET">
+    <div class="lockBox box">
+      <svg>
+        <path d=""></path>
+      </svg>
+    </div>
+
+    <div>
+      <label for="sapId">SAP ID:</label>
+      <input type="text" id="sapId" name="sapId" placeholder="Enter your SAP ID" required>
+    </div>
+    <div>
+      <label for="patternString">Pattern String:</label>
+      <input type="text" id="patternString" name="patternString" readonly >
+    </div>
+    <div>
+      <label for="latitude">Latitude:</label>
+      <input type="text" id="latitude" name="latitude" readonly>
+    </div>
+    <div>
+      <label for="longitude">Longitude:</label>
+      <input type="text" id="longitude" name="longitude" readonly>
+    </div>
+    
+    <button type="submit" id="submitButton">Submit</button>
+  </form>
+
+  <script>
+    var log = console.log;
+    function op(elem) {
+      return document.querySelector(elem);
+    }
+    function opp(elem) {
+      return document.querySelectorAll(elem);
+    }
+
+    var lockBox = op(".lockBox");
+    var patternInput = op("#patternString");
+    var latitudeInput = op("#latitude");
+    var longitudeInput = op("#longitude");
+    var sapIdInput = op("#sapId");
+    var submitButton = op("#submitButton");
+
+    var alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+    var gridSize = 4; // Example: 4x4 grid
+
+    // Create the grid
+    for (var i = 0; i < gridSize * gridSize; i++) {
+      lockBox.insertAdjacentHTML(
+        "afterbegin",
+        `<div class="dot">
+           <div class="dotArea" onmousedown="down(this)">
+             <i>${alphabet[i]}</i>
+           </div>
+         </div>`
+      );
+    }
+
+    var startDot,
+      svg = op("svg"),
+      dots = opp(".dot"),
+      lineData = "M",
+      tempLineData,
+      svgPath = op("svg path"),
+      inputData = "";
+
+    function end() {
+      // Display the final pattern in the input field
+      patternInput.value = inputData;
+
+      startDot = undefined;
+      lineData = "M";
+      inputData = "";
+      tempLineData = undefined;
+
+      setTimeout(() => {
+        opp(".dot.active").forEach((val) => val.classList.remove("active"));
+        svgPath.setAttribute("d", "");
+      }, 500);
+    }
+
+    function down(elem) {
+      startDot = elem;
+      lockBox.addEventListener("mousemove", moving);
+      addEvToMouseEnter();
+      lineData += `${
+        startDot.parentElement.offsetLeft + 5
+      },${startDot.parentElement.offsetTop + 5}`;
+      makeLine();
+      startDot.classList.add("active");
+    }
+
+    document.onmouseup = function () {
+      lockBox.removeEventListener("mousemove", moving);
+      removeEvToMouseEnter();
+      tempLineData = "";
+      updateLine();
+      end();
+    };
+
+    function moving(e) {
+      makeLineWhileMoving(e.clientX, e.clientY);
+    }
+
+    function makeLineWhileMoving(x, y) {
+      var x = Math.floor(x - lockBox.getBoundingClientRect().left);
+      var y = Math.floor(y - lockBox.getBoundingClientRect().top);
+      tempLineData = " L" + x + "," + y;
+      updateLine();
+    }
+
+    function makeLine(e = startDot) {
+      e.target = startDot;
+      var dot = e.target.parentElement;
+      dot.classList.add("active");
+      inputData += dot.innerText; // Add dot's corresponding alphabet to inputData
+      makeLineWhileMoving(
+        dot.getBoundingClientRect().left,
+        dot.getBoundingClientRect().top
+      );
+      lineData += tempLineData;
+    }
+
+    function addEvToMouseEnter() {
+      opp(".dotArea").forEach((val) => {
+        val.addEventListener("mouseenter", makeLine);
+      });
+    }
+
+    function removeEvToMouseEnter() {
+      opp(".dotArea").forEach((val) => {
+        val.removeEventListener("mouseenter", makeLine);
+      });
+    }
+
+    function updateLine() {
+      svgPath.setAttribute("d", lineData + tempLineData);
+    }
+
+    // Get the user's geolocation
+    function getGeolocation() {
+      if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition((position) => {
+          latitudeInput.value = position.coords.latitude;
+          longitudeInput.value = position.coords.longitude;
+        });
+      } else {
+        alert("Geolocation is not supported by this browser.");
+      }
+    }
+
+    // Fetch geolocation when the page loads
+    window.onload = getGeolocation;
+  </script>
+</body>
+</html>
